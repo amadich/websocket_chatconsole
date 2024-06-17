@@ -34,8 +34,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on('disconnect', () => {
-    connectedUsers--;
-    io.emit('update_user_count', connectedUsers);
+    //connectedUsers--;
+    //io.emit('update_user_count', connectedUsers);
     console.log('A user disconnected, ID:', socket.id);
   });
 });
