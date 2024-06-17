@@ -56,7 +56,7 @@ export default function Chat({ socket, username, room_id, userCount } : any) {
          <div id="messageList" >
             {messagesList.map((message, index) => (
                <div key={index} className="text-left">
-               <span className="font-bold">{message.username}</span>: {message.message}
+               <span className="font-bold" style={username == message.username ? {color: "red"} : {color: "black"}}>{message.username}</span>: {message.message}
                </div>
             ))}
          </div>
