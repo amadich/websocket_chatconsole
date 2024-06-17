@@ -4,25 +4,39 @@ import { io } from "socket.io-client";
 import Chat from "./components/Chat";
 
 export default function Home() {
-  const socket = io("http://localhost:3001");
+  const socket = io("http://localhost:3001" , {
+    autoConnect: false,
+    
+  });
 
   const [username, setUsername] = useState("");
   const [room_id, setRoom_id] = useState("");
   const [userCount, setUserCount] = useState(0);
 
-  useEffect(() => {
+  
 
-    socket.on("update_user_count", (count) => {
-      setUserCount(count);
-    });
+    // Setup event listeners here before connecting.
+    
+    
+  
+   
+  
+    
 
-  }, [socket]);
-
+  
+  
   const joinRoom = () => {
     if (username !== "" && room_id !== "") {
-      socket.emit("join_room", { username, room_id });
-      // setUsername("");
-      // setRoom_id("");
+      // Ensure the socket is connected before trying to emit events.
+      if (!socket.connected) {
+        socket.connect();
+       
+      }
+      
+      
+       socket.emit("join_room", { username, room_id });
+       //socket.on("update_user_count", (count) => {setUserCount(count);});
+
     } else {
       alert("Please fill all the fields");
     }

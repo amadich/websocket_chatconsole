@@ -19,8 +19,8 @@ const io = new Server(server, {
 let connectedUsers = 0;
 
 io.on("connection", (socket) => {
-  //connectedUsers++;
-  //io.emit('update_user_count', connectedUsers);
+  connectedUsers++;
+  io.emit('update_user_count', connectedUsers);
   console.log('A user connected, ID:', socket.id);
 
   socket.on('join_room', (data) => {
@@ -34,8 +34,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on('disconnect', () => {
-    //connectedUsers--;
-    //io.emit('update_user_count', connectedUsers);
+    connectedUsers--;
+    io.emit('update_user_count', connectedUsers);
     console.log('A user disconnected, ID:', socket.id);
   });
 });
