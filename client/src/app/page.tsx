@@ -3,40 +3,36 @@ import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import Chat from "./components/Chat";
 
-export default function Home() {
-  const socket = io("http://localhost:3001" , {
-    autoConnect: false,
-    
-  });
+const socket = io("http://localhost:3001", {
+  autoConnect: false,
+});
 
+export default function Home() {
   const [username, setUsername] = useState("");
   const [room_id, setRoom_id] = useState("");
   const [userCount, setUserCount] = useState(0);
 
-  
+  useEffect(() => {
+    socket.connect();
 
-    // Setup event listeners here before connecting.
-    
-    
-  
-   
-  
-    
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
 
-  
-  
+    socket.on("update_user_count", (count) => {
+      setUserCount(count);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("update_user_count");
+      socket.close();
+    };
+  }, []);
+
   const joinRoom = () => {
     if (username !== "" && room_id !== "") {
-      // Ensure the socket is connected before trying to emit events.
-      if (!socket.connected) {
-        socket.connect();
-       
-      }
-      
-      
-       socket.emit("join_room", { username, room_id });
-       //socket.on("update_user_count", (count) => {setUserCount(count);});
-
+      socket.emit("join_room", { username, room_id });
     } else {
       alert("Please fill all the fields");
     }
