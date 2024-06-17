@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function Chat({ socket, username, room_id, userCount } : any) {
   const [message, setMessage] = useState("");
+  const [messagesList, setMessagesList] = useState([] as any[]);
 
   const sendMessage = async () => {
     if (message !== "") {
@@ -19,6 +20,7 @@ export default function Chat({ socket, username, room_id, userCount } : any) {
   useEffect(() => {
     const receiveMessageHandler = (data : any) => {
       console.log("Message received:", data);
+      setMessagesList((oldArray) => [...oldArray, data]);
     };
 
     socket.on("receive_message", receiveMessageHandler);
@@ -49,6 +51,15 @@ export default function Chat({ socket, username, room_id, userCount } : any) {
             &#9658;
           </button>
         </div>
+
+         <div id="messageList" >
+            {messagesList.map((message, index) => (
+               <div key={index} className="text-left">
+               <span className="font-bold">{message.username}</span>: {message.message}
+               </div>
+            ))}
+         </div>
+
       </div>
     </>
   );
